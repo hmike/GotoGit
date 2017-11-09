@@ -58,6 +58,12 @@ def get_git_url(git_config_path):
 
 	return protocol + '://' + host + repo
 
+def get_branch(git_config_path):
+	ref = open(os.path.join(git_config_path, '.git', 'HEAD'), "r").read().replace('ref: ', '')[:-1]
+	branch = ref.replace('refs/heads/','')
+
+	return branch
+
 # Extends TextCommand so that run() receives a View to modify.
 class GotoGitCommand(sublime_plugin.TextCommand):
 	def run(self, view):
@@ -87,7 +93,7 @@ class GotoGitCommand(sublime_plugin.TextCommand):
 		"""
 			Get branch
 		"""
-		branch = '/blob/master'
+		branch = '/blob/' + get_branch(git_config_path)
 
 		"""
 			Generate relative path
